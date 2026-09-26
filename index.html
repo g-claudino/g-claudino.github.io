@@ -31,6 +31,7 @@
 
     --maxw: 920px;
     --rail-w: 88px;
+    --tabbar-h: 52px;
   }
 
   /* ---------- reset ---------- */
@@ -67,11 +68,44 @@
     min-height: 100vh;
   }
 
+  /* ---------- top-level page tabs ---------- */
+  .app-tabbar{
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    display: flex;
+    gap: 4px;
+    padding: 10px 16px;
+    height: var(--tabbar-h);
+    align-items: center;
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .app-tab{
+    background: none;
+    border: 1px solid transparent;
+    color: var(--text-faint);
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    padding: 7px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  }
+  .app-tab:hover{ color: var(--text-primary); }
+  .app-tab.active{
+    color: var(--amber);
+    background: var(--bg-panel-2);
+    border-color: var(--line);
+  }
+  .page[hidden]{ display: none; }
+
   /* ---------- rail nav ---------- */
   .rail{
     position: sticky;
-    top: 0;
-    height: 100vh;
+    top: var(--tabbar-h);
+    height: calc(100vh - var(--tabbar-h));
     border-right: 1px solid var(--line-soft);
     display: flex;
     flex-direction: column;
@@ -477,6 +511,107 @@
   .note-line:last-child{ border-bottom: none; }
   .note-line strong{ color: var(--text-primary); font-weight: 500; }
 
+  /* ---------- road trip page ---------- */
+  .subpage-head{
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 40px 32px 24px;
+  }
+  .subpage-head h2{
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 2.4vw, 1.7rem);
+    font-weight: 600;
+  }
+  .subpage-head p{
+    margin-top: 10px;
+    color: var(--text-muted);
+    font-size: 0.94rem;
+    max-width: 60ch;
+  }
+  .subpage-head a{
+    color: var(--cyan);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease;
+  }
+  .subpage-head a:hover{ border-color: var(--cyan); }
+  .roadtrip-frame{
+    display: block;
+    width: 100%;
+    height: calc(100vh - var(--tabbar-h) - 132px);
+    min-height: 480px;
+    border: none;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  /* ---------- recipes page ---------- */
+  .recipes-grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--line-soft);
+    border: 1px solid var(--line-soft);
+    max-width: var(--maxw);
+    margin: 0 32px 80px;
+  }
+  .recipe{
+    background: var(--bg-panel);
+    padding: 26px 24px;
+    display: flex;
+    flex-direction: column;
+  }
+  .recipe-name{
+    font-family: var(--font-display);
+    font-size: 1.02rem;
+    font-weight: 600;
+  }
+  .recipe-tag{
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 0.72rem;
+    color: var(--amber);
+    border: 1px solid var(--amber-dim);
+    border-radius: 3px;
+    padding: 2px 7px;
+    width: fit-content;
+  }
+  .recipe-desc{
+    margin-top: 14px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+  .recipe-details{
+    margin-top: 16px;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+  }
+  .recipe-details summary{
+    cursor: pointer;
+    color: var(--cyan);
+    font-size: 0.86rem;
+  }
+  .recipe-details h4{
+    margin-top: 14px;
+    margin-bottom: 8px;
+    font-family: var(--font-display);
+    font-size: 0.76rem;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .recipe-details ul, .recipe-details ol{
+    padding-left: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .recipe-details ul{ list-style: disc; }
+  .recipe-details ol{ list-style: decimal; }
+
+  @media (max-width: 760px){
+    .recipes-grid{ grid-template-columns: 1fr; margin: 0 22px 56px; }
+    .subpage-head{ padding: 28px 22px 20px; }
+  }
+
   /* ---------- footer ---------- */
   footer{
     max-width: var(--maxw);
@@ -502,7 +637,7 @@
     .wrap{ grid-template-columns: 1fr; }
     .rail{
       position: sticky;
-      top: 0;
+      top: var(--tabbar-h);
       height: auto;
       width: 100%;
       flex-direction: row;
@@ -542,6 +677,14 @@
 </style>
 </head>
 <body>
+
+<div class="app-tabbar" role="tablist" aria-label="Site sections">
+  <button type="button" class="app-tab" data-page="cv" role="tab" data-i18n="nav.tabCv">CV</button>
+  <button type="button" class="app-tab" data-page="roadtrip" role="tab" data-i18n="nav.tabRoadtrip">Road Trip Planner</button>
+  <button type="button" class="app-tab" data-page="recipes" role="tab" data-i18n="nav.tabRecipes">Recipes</button>
+</div>
+
+<div class="page" data-page="cv" id="page-cv">
 <div class="wrap">
 
   <!-- ---------- rail ---------- -->
@@ -826,6 +969,24 @@
     </footer>
   </main>
 </div>
+</div>
+
+<div class="page" data-page="roadtrip" id="page-roadtrip" hidden>
+  <div class="subpage-head">
+    <h2 data-i18n="roadtrip.heading">Road Trip Planner</h2>
+    <p data-i18n="roadtrip.subtitle">Plan a multi-day road trip: route, sightseeing stops, border-crossing documents and cost estimates.</p>
+    <p><a href="/road-trip-planner/" target="_blank" rel="noopener" data-i18n="roadtrip.openInNewTab">Open in a new tab ↗</a></p>
+  </div>
+  <iframe class="roadtrip-frame" src="/road-trip-planner/" title="Road Trip Planner" loading="lazy"></iframe>
+</div>
+
+<div class="page" data-page="recipes" id="page-recipes" hidden>
+  <div class="subpage-head">
+    <h2 data-i18n="recipes.heading">Recipes</h2>
+    <p data-i18n="recipes.subtitle">Kitchen notes from the culinary side of things — click a recipe for ingredients and steps.</p>
+  </div>
+  <div class="recipes-grid" id="recipes-grid"></div>
+</div>
 
 <script>
   // ---------- translations ----------
@@ -862,7 +1023,11 @@
       "beyond.youtube.label":"YouTube","beyond.youtube.desc":"runs a channel called \"Engenheiro Chefe.\"",
       "beyond.volunteering.label":"Volunteering","beyond.volunteering.desc":"project manager at Somos Todos Heróis (Dec 2018 – Dec 2019); founder of Sanca Social, a volunteering group in São Carlos.",
       "beyond.citizenship.label":"Citizenship","beyond.citizenship.desc":"dual Portuguese / Brazilian.",
-      "footer.github":"GitHub","footer.linkedin":"LinkedIn","title.suffix":"Aeronautical Engineer"
+      "footer.github":"GitHub","footer.linkedin":"LinkedIn","title.suffix":"Aeronautical Engineer",
+      "nav.tabCv":"CV","nav.tabRoadtrip":"Road Trip Planner","nav.tabRecipes":"Recipes",
+      "roadtrip.heading":"Road Trip Planner","roadtrip.subtitle":"Plan a multi-day road trip: route, sightseeing stops, border-crossing documents and cost estimates.","roadtrip.openInNewTab":"Open in a new tab ↗",
+      "recipes.heading":"Recipes","recipes.subtitle":"Kitchen notes from the culinary side of things — click a recipe for ingredients and steps.",
+      "recipes.details":"Ingredients & steps","recipes.ingredients":"Ingredients","recipes.steps":"Steps"
     },
     pt: {
       "nav.experience":"Experiência","nav.background":"Formação","nav.articles":"Artigos","nav.projects":"Projetos","nav.instruments":"Instrumentos","nav.notes":"Notas de bordo","nav.ariaLabel":"Navegação de seções",
@@ -896,7 +1061,11 @@
       "beyond.youtube.label":"YouTube","beyond.youtube.desc":"mantém um canal chamado \"Engenheiro Chefe\".",
       "beyond.volunteering.label":"Voluntariado","beyond.volunteering.desc":"gerente de projetos na Somos Todos Heróis (dez/2018 – dez/2019); fundador do Sanca Social, grupo de voluntariado em São Carlos.",
       "beyond.citizenship.label":"Cidadania","beyond.citizenship.desc":"dupla cidadania portuguesa e brasileira.",
-      "footer.github":"GitHub","footer.linkedin":"LinkedIn","title.suffix":"Engenheiro Aeronáutico"
+      "footer.github":"GitHub","footer.linkedin":"LinkedIn","title.suffix":"Engenheiro Aeronáutico",
+      "nav.tabCv":"CV","nav.tabRoadtrip":"Planejador de Viagem","nav.tabRecipes":"Receitas",
+      "roadtrip.heading":"Planejador de Viagem","roadtrip.subtitle":"Planeje uma viagem de carro de vários dias: rota, pontos turísticos, documentos de fronteira e custos estimados.","roadtrip.openInNewTab":"Abrir em nova aba ↗",
+      "recipes.heading":"Receitas","recipes.subtitle":"Notas de cozinha do lado culinário — clique numa receita para ver ingredientes e modo de preparo.",
+      "recipes.details":"Ingredientes e modo de preparo","recipes.ingredients":"Ingredientes","recipes.steps":"Modo de preparo"
     },
     fr: {
       "nav.experience":"Expérience","nav.background":"Formation","nav.articles":"Articles","nav.projects":"Projets","nav.instruments":"Instruments","nav.notes":"Carnet de bord","nav.ariaLabel":"Navigation des sections",
@@ -930,7 +1099,11 @@
       "beyond.youtube.label":"YouTube","beyond.youtube.desc":"anime une chaîne appelée « Engenheiro Chefe ».",
       "beyond.volunteering.label":"Bénévolat","beyond.volunteering.desc":"chef de projet chez Somos Todos Heróis (déc. 2018 – déc. 2019) ; fondateur de Sanca Social, un groupe de bénévolat à São Carlos.",
       "beyond.citizenship.label":"Citoyenneté","beyond.citizenship.desc":"double nationalité portugaise et brésilienne.",
-      "footer.github":"GitHub","footer.linkedin":"LinkedIn","title.suffix":"Ingénieur Aéronautique"
+      "footer.github":"GitHub","footer.linkedin":"LinkedIn","title.suffix":"Ingénieur Aéronautique",
+      "nav.tabCv":"CV","nav.tabRoadtrip":"Road Trip","nav.tabRecipes":"Recettes",
+      "roadtrip.heading":"Planificateur de Road Trip","roadtrip.subtitle":"Planifiez un road trip de plusieurs jours : itinéraire, étapes touristiques, documents de frontière et coûts estimés.","roadtrip.openInNewTab":"Ouvrir dans un nouvel onglet ↗",
+      "recipes.heading":"Recettes","recipes.subtitle":"Notes de cuisine — cliquez sur une recette pour voir les ingrédients et les étapes.",
+      "recipes.details":"Ingrédients et étapes","recipes.ingredients":"Ingrédients","recipes.steps":"Étapes"
     },
     de: {
       "nav.experience":"Erfahrung","nav.background":"Ausbildung","nav.articles":"Artikel","nav.projects":"Projekte","nav.instruments":"Instrumente","nav.notes":"Feldnotizen","nav.ariaLabel":"Abschnittsnavigation",
@@ -964,7 +1137,11 @@
       "beyond.youtube.label":"YouTube","beyond.youtube.desc":"betreibt einen Kanal namens „Engenheiro Chefe“.",
       "beyond.volunteering.label":"Ehrenamt","beyond.volunteering.desc":"Projektleiter bei Somos Todos Heróis (Dez. 2018 – Dez. 2019); Gründer von Sanca Social, einer Freiwilligengruppe in São Carlos.",
       "beyond.citizenship.label":"Staatsbürgerschaft","beyond.citizenship.desc":"doppelte portugiesisch-brasilianische Staatsbürgerschaft.",
-      "footer.github":"GitHub","footer.linkedin":"LinkedIn","title.suffix":"Luftfahrtingenieur"
+      "footer.github":"GitHub","footer.linkedin":"LinkedIn","title.suffix":"Luftfahrtingenieur",
+      "nav.tabCv":"CV","nav.tabRoadtrip":"Roadtrip-Planer","nav.tabRecipes":"Rezepte",
+      "roadtrip.heading":"Roadtrip-Planer","roadtrip.subtitle":"Plane einen mehrtägigen Roadtrip: Route, Sehenswürdigkeiten, Grenzdokumente und Kostenschätzungen.","roadtrip.openInNewTab":"In neuem Tab öffnen ↗",
+      "recipes.heading":"Rezepte","recipes.subtitle":"Küchennotizen — auf ein Rezept klicken für Zutaten und Zubereitung.",
+      "recipes.details":"Zutaten und Zubereitung","recipes.ingredients":"Zutaten","recipes.steps":"Zubereitung"
     },
     es: {
       "nav.experience":"Experiencia","nav.background":"Formación","nav.articles":"Artículos","nav.projects":"Proyectos","nav.instruments":"Instrumentos","nav.notes":"Notas de campo","nav.ariaLabel":"Navegación de secciones",
@@ -998,11 +1175,84 @@
       "beyond.youtube.label":"YouTube","beyond.youtube.desc":"mantiene un canal llamado «Engenheiro Chefe».",
       "beyond.volunteering.label":"Voluntariado","beyond.volunteering.desc":"gerente de proyecto en Somos Todos Heróis (dic. 2018 – dic. 2019); fundador de Sanca Social, un grupo de voluntariado en São Carlos.",
       "beyond.citizenship.label":"Ciudadanía","beyond.citizenship.desc":"doble ciudadanía portuguesa y brasileña.",
-      "footer.github":"GitHub","footer.linkedin":"LinkedIn","title.suffix":"Ingeniero Aeronáutico"
+      "footer.github":"GitHub","footer.linkedin":"LinkedIn","title.suffix":"Ingeniero Aeronáutico",
+      "nav.tabCv":"CV","nav.tabRoadtrip":"Planificador de Viaje","nav.tabRecipes":"Recetas",
+      "roadtrip.heading":"Planificador de Viaje","roadtrip.subtitle":"Planifica un viaje por carretera de varios días: ruta, paradas turísticas, documentos fronterizos y costos estimados.","roadtrip.openInNewTab":"Abrir en una pestaña nueva ↗",
+      "recipes.heading":"Recetas","recipes.subtitle":"Notas de cocina — haz clic en una receta para ver ingredientes y pasos.",
+      "recipes.details":"Ingredientes y pasos","recipes.ingredients":"Ingredientes","recipes.steps":"Pasos"
     }
   };
 
   const SUPPORTED = Object.keys(translations);
+
+  // ---------- recipes ----------
+  // Add your own recipes here — each becomes a card on the Recipes tab.
+  // Content isn't part of the translation system above; write it in
+  // whatever language you like.
+  const recipes = [
+    {
+      title: "Pão de Queijo",
+      tag: "Lanche · 40 min · 20 unidades",
+      desc: "O clássico pãozinho de queijo mineiro, crocante por fora e macio por dentro.",
+      ingredients: [
+        "500 g de polvilho azedo",
+        "250 ml de leite",
+        "125 ml de óleo",
+        "2 ovos",
+        "200 g de queijo meia-cura ralado",
+        "1 colher (chá) de sal",
+      ],
+      steps: [
+        "Ferva o leite com o óleo e o sal, e escalde o polvilho aos poucos, misturando bem.",
+        "Deixe esfriar até ficar morno, então adicione os ovos e o queijo ralado.",
+        "Sove até obter uma massa lisa e homogênea.",
+        "Modele bolinhas e leve ao forno pré-aquecido a 180°C por 25–30 min, até dourar.",
+      ],
+    },
+    {
+      title: "Coq au Vin",
+      tag: "Prato principal · 2h · 4 porções",
+      desc: "Frango braseado lentamente em vinho tinto, com bacon, cogumelos e cebolas pérola.",
+      ingredients: [
+        "1 frango cortado em pedaços",
+        "200 g de bacon em cubos",
+        "250 g de cogumelos-de-paris",
+        "12 cebolas pérola",
+        "750 ml de vinho tinto encorpado",
+        "2 colheres (sopa) de farinha",
+        "Tomilho, louro e alho",
+      ],
+      steps: [
+        "Doure o bacon, reserve, e doure o frango na mesma gordura.",
+        "Refogue as cebolas e os cogumelos, junte o frango e o bacon de volta à panela.",
+        "Polvilhe a farinha, misture, e cubra com o vinho e as ervas.",
+        "Deixe cozinhar em fogo baixo, tampado, por cerca de 1h30, até o frango ficar bem macio.",
+      ],
+    },
+  ];
+
+  function renderRecipes(lang){
+    const grid = document.getElementById('recipes-grid');
+    if (!grid) return;
+    grid.innerHTML = recipes.map(function(r){
+      const ingredients = r.ingredients.map(function(i){ return '<li>' + i + '</li>'; }).join('');
+      const steps = r.steps.map(function(s){ return '<li>' + s + '</li>'; }).join('');
+      return (
+        '<div class="recipe">' +
+          '<div class="recipe-name">' + r.title + '</div>' +
+          '<span class="recipe-tag">' + r.tag + '</span>' +
+          '<p class="recipe-desc">' + r.desc + '</p>' +
+          '<details class="recipe-details">' +
+            '<summary>' + t('recipes.details', lang) + '</summary>' +
+            '<h4>' + t('recipes.ingredients', lang) + '</h4>' +
+            '<ul>' + ingredients + '</ul>' +
+            '<h4>' + t('recipes.steps', lang) + '</h4>' +
+            '<ol>' + steps + '</ol>' +
+          '</details>' +
+        '</div>'
+      );
+    }).join('');
+  }
 
   function t(key, lang){
     const dict = translations[lang] || translations.en;
@@ -1025,6 +1275,7 @@
       b.setAttribute('aria-pressed', active ? 'true' : 'false');
     });
     try{ localStorage.setItem('gc-site-lang', lang); }catch(e){}
+    renderRecipes(lang);
   }
 
   function initialLanguage(){
@@ -1056,6 +1307,41 @@
     }, { rootMargin: '-40% 0px -50% 0px' });
     targets.forEach(t => t && io.observe(t));
   }
+
+  // ---------- top-level page tabs ----------
+  const PAGES = ['cv', 'roadtrip', 'recipes'];
+
+  function currentHashPage(){
+    const h = location.hash.replace('#', '');
+    return PAGES.includes(h) ? h : 'cv';
+  }
+
+  function showPage(page){
+    if (!PAGES.includes(page)) page = 'cv';
+    document.querySelectorAll('.page').forEach(function(el){
+      el.hidden = el.getAttribute('data-page') !== page;
+    });
+    document.querySelectorAll('.app-tab').forEach(function(btn){
+      const active = btn.getAttribute('data-page') === page;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+  }
+
+  document.querySelectorAll('.app-tab').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      const page = btn.getAttribute('data-page');
+      if (page === 'cv') {
+        history.pushState(null, '', location.pathname + location.search);
+        showPage('cv');
+      } else {
+        location.hash = page;
+      }
+    });
+  });
+
+  window.addEventListener('hashchange', function(){ showPage(currentHashPage()); });
+  showPage(currentHashPage());
 </script>
 </body>
 </html>
