@@ -76,9 +76,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 28px 0;
-    gap: 40px;
+    padding: 20px 0;
+    gap: 20px;
+    overflow-y: auto;
+    scrollbar-width: none;
   }
+  .rail::-webkit-scrollbar{ display: none; }
   .rail-mark{
     width: 34px; height: 34px;
     border: 1px solid var(--line);
@@ -93,9 +96,10 @@
   .rail-nav{
     display: flex;
     flex-direction: column;
-    gap: 26px;
+    gap: 14px;
     flex: 1;
     justify-content: center;
+    min-height: 0;
   }
   .rail-nav a{
     display: flex;
@@ -121,7 +125,7 @@
     letter-spacing: 0.04em;
   }
   .rail-foot{
-    display:flex; flex-direction:column; gap:16px; align-items:center;
+    display:flex; flex-direction:column; gap:12px; align-items:center;
   }
   .rail-foot a{ color: var(--text-faint); transition: color 0.2s ease; }
   .rail-foot a:hover{ color: var(--cyan); }
@@ -132,9 +136,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    margin-top: 6px;
-    padding-top: 16px;
+    gap: 6px;
+    margin-top: 2px;
+    padding-top: 12px;
     border-top: 1px solid var(--line-soft);
   }
   .lang-switch button{
@@ -543,13 +547,15 @@
     }
     .rail-nav{
       flex-direction: row;
-      flex: none;
+      flex: 1;
+      min-width: 0;
       gap: 18px;
       overflow-x: auto;
     }
+    .rail-mark{ flex-shrink: 0; }
     .rail-nav a{ flex-direction: row; gap: 5px; }
     .rail-nav a span.label{ writing-mode: horizontal-tb; }
-    .rail-foot{ flex-direction: row; }
+    .rail-foot{ flex-direction: row; flex-shrink: 0; }
     .lang-switch{
       flex-direction: row;
       gap: 10px;
