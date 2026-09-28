@@ -30,8 +30,7 @@
     --font-body: 'IBM Plex Sans', system-ui, sans-serif;
 
     --maxw: 920px;
-    --rail-w: 88px;
-  }
+    }
 
   /* ---------- reset ---------- */
   *,*::before,*::after{ box-sizing: border-box; }
@@ -61,29 +60,25 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  .wrap{
-    display: grid;
-    grid-template-columns: var(--rail-w) 1fr;
-    min-height: 100vh;
-  }
+  .wrap{ min-height: 100vh; }
 
-  /* ---------- rail nav ---------- */
-  .rail{
+  /* ---------- top bar ---------- */
+  .topbar{
     position: sticky;
     top: 0;
-    height: 100vh;
-    border-right: 1px solid var(--line-soft);
+    z-index: 20;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    padding: 20px 0;
-    gap: 20px;
-    overflow-y: auto;
-    scrollbar-width: none;
+    gap: 28px;
+    padding: 12px 32px;
+    background: rgba(10,14,18,0.92);
+    -webkit-backdrop-filter: blur(6px);
+            backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line-soft);
   }
-  .rail::-webkit-scrollbar{ display: none; }
-  .rail-mark{
+  .brand{
     width: 34px; height: 34px;
+    flex-shrink: 0;
     border: 1px solid var(--line);
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
@@ -92,54 +87,44 @@
     font-weight: 600;
     color: var(--amber);
     letter-spacing: 0.02em;
+    transition: border-color 0.2s ease;
   }
-  .rail-nav{
+  .brand:hover{ border-color: var(--amber); }
+  .tabs{
     display: flex;
-    flex-direction: column;
-    gap: 14px;
-    flex: 1;
-    justify-content: flex-start;
-    min-height: 0;
-  }
-  .rail-nav a{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     gap: 6px;
-    color: var(--text-faint);
+    flex: 1;
+    min-width: 0;
+  }
+  .tab{
+    padding: 9px 14px;
     font-family: var(--font-display);
-    font-size: 0.68rem;
-    transition: color 0.2s ease;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color 0.2s ease, border-color 0.2s ease;
   }
-  .rail-nav a .num{
-    font-size: 0.62rem;
-    color: var(--text-faint);
+  .tab:hover{ color: var(--amber); border-bottom-color: var(--amber); }
+  .tab[aria-current="page"]{ color: var(--text-primary); border-bottom-color: var(--amber); }
+  .top-tools{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
   }
-  .rail-nav a:hover,
-  .rail-nav a:hover .num,
-  .rail-nav a.active,
-  .rail-nav a.active .num{ color: var(--amber); }
-  .rail-nav a span.label{
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
-    letter-spacing: 0.04em;
-  }
-  .rail-foot{
-    display:flex; flex-direction:column; gap:12px; align-items:center;
-  }
-  .rail-foot a{ color: var(--text-faint); transition: color 0.2s ease; }
-  .rail-foot a:hover{ color: var(--cyan); }
-  .rail-foot svg{ width:16px; height:16px; }
+  .top-tools a{ color: var(--text-faint); transition: color 0.2s ease; display: flex; }
+  .top-tools a:hover{ color: var(--cyan); }
+  .top-tools svg{ width: 16px; height: 16px; }
 
   /* ---------- language switch ---------- */
   .lang-switch{
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 6px;
-    margin-top: 2px;
-    padding-top: 12px;
-    border-top: 1px solid var(--line-soft);
+    gap: 10px;
+    padding-left: 14px;
+    border-left: 1px solid var(--line-soft);
   }
   .lang-switch button{
     background: none;
@@ -148,7 +133,7 @@
     margin: 0;
     cursor: pointer;
     font-family: var(--font-display);
-    font-size: 0.62rem;
+    font-size: 0.68rem;
     letter-spacing: 0.03em;
     color: var(--text-faint);
     transition: color 0.2s ease;
@@ -414,32 +399,6 @@
   }
   .proj-more a{ color: var(--cyan); }
 
-  /* ---------- embedded 3d printing tab ---------- */
-  .embed-frame{
-    border: 1px solid var(--line-soft);
-    border-radius: 4px;
-    background: var(--bg-panel);
-    overflow: hidden;
-  }
-  .embed-frame iframe{
-    display: block;
-    width: 100%;
-    height: 640px;
-    border: none;
-    background: var(--bg-panel);
-  }
-  .embed-foot{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 20px;
-    margin-top: 16px;
-  }
-  .embed-caption{
-    font-size: 0.8rem;
-    color: var(--text-faint);
-  }
-
   /* ---------- instruments / skills ---------- */
   .instr-group{ margin-bottom: 40px; }
   .instr-group:last-child{ margin-bottom: 0; }
@@ -527,46 +486,12 @@
   footer .f-links svg{ width: 14px; height: 14px; }
   footer .f-note{ color: var(--text-faint); font-size: 0.82rem; }
 
-  /* ---------- mobile rail as top bar ---------- */
+  /* ---------- mobile ---------- */
   @media (max-width: 760px){
-    .wrap{ grid-template-columns: 1fr; }
-    .rail{
-      position: sticky;
-      top: 0;
-      height: auto;
-      width: 100%;
-      flex-direction: row;
-      border-right: none;
-      border-bottom: 1px solid var(--line-soft);
-      padding: 14px 18px;
-      gap: 18px;
-      background: rgba(10,14,18,0.92);
-      backdrop-filter: blur(6px);
-      z-index: 10;
-      justify-content: space-between;
-    }
-    .rail-nav{
-      flex-direction: row;
-      flex: 1;
-      min-width: 0;
-      gap: 18px;
-      overflow-x: auto;
-    }
-    .rail-mark{ flex-shrink: 0; }
-    .rail-nav a{ flex-direction: row; gap: 5px; }
-    .rail-nav a span.label{ writing-mode: horizontal-tb; }
-    .rail-foot{ flex-direction: row; flex-shrink: 0; }
-    .lang-switch{
-      flex-direction: row;
-      gap: 10px;
-      margin-top: 0;
-      padding-top: 0;
-      border-top: none;
-      padding-left: 14px;
-      border-left: 1px solid var(--line-soft);
-    }
+    .topbar{ flex-wrap: wrap; gap: 8px 14px; padding: 10px 18px; }
+    .top-tools{ margin-left: auto; }
+    .tabs{ order: 3; flex-basis: 100%; overflow-x: auto; }
     .hero-graphic{ opacity: 0.5; width: 80vw; right: -30px; }
-    .embed-frame iframe{ height: 420px; }
     .notes-grid{ grid-template-columns: 1fr; gap: 36px; }
     .projects{ grid-template-columns: 1fr; }
     .section{ padding: 64px 22px; }
@@ -575,21 +500,18 @@
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" id="top">
 
-  <!-- ---------- rail ---------- -->
-  <nav class="rail" aria-label="Section navigation" data-i18n-aria="nav.ariaLabel">
-    <div class="rail-mark" aria-hidden="true">GC</div>
-    <div class="rail-nav">
-      <a href="#experience"><span class="num">01</span><span class="label" data-i18n="nav.experience">Experience</span></a>
-      <a href="#background"><span class="num">02</span><span class="label" data-i18n="nav.background">Background</span></a>
-      <a href="#articles"><span class="num">03</span><span class="label" data-i18n="nav.articles">Articles</span></a>
-      <a href="#projects"><span class="num">04</span><span class="label" data-i18n="nav.projects">Projects</span></a>
-      <a href="#printing"><span class="num">05</span><span class="label" data-i18n="nav.printing">3D Printing</span></a>
-      <a href="#instruments"><span class="num">06</span><span class="label" data-i18n="nav.instruments">Instruments</span></a>
-      <a href="#notes"><span class="num">07</span><span class="label" data-i18n="nav.notes">Field notes</span></a>
-    </div>
-    <div class="rail-foot">
+  <!-- ---------- top bar ---------- -->
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Guilherme Claudino">GC</a>
+    <nav class="tabs" aria-label="Site pages" data-i18n-aria="nav.ariaLabel">
+      <a class="tab" href="https://g-claudino.github.io/" aria-current="page" data-i18n="nav.cv">CV</a>
+      <a class="tab" href="https://g-claudino.github.io/road-trip-planner/" data-i18n="nav.roadtrip">Road Trip Project</a>
+      <a class="tab" href="recipes/" data-i18n="nav.recipes">Recipes</a>
+      <a class="tab" href="https://g-claudino.github.io/3d_printing/" data-i18n="nav.printing">3D Printing</a>
+    </nav>
+    <div class="top-tools">
       <a href="https://github.com/g-claudino" target="_blank" rel="noopener" aria-label="GitHub">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.4 7.86 10.93.58.1.79-.25.79-.56 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.34-1.28-1.69-1.28-1.69-1.04-.72.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.77.12 3.06.74.8 1.18 1.83 1.18 3.09 0 4.43-2.69 5.4-5.25 5.69.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .31.21.67.8.56A10.52 10.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
       </a>
@@ -604,7 +526,7 @@
         <button type="button" data-lang="es" aria-pressed="false" title="Español">ES</button>
       </div>
     </div>
-  </nav>
+  </header>
 
   <main>
     <!-- ---------- hero ---------- -->
@@ -774,29 +696,9 @@
       </div>
     </section>
 
-    <!-- ---------- 3d printing ---------- -->
-    <section class="section" id="printing">
-      <div class="section-head"><span class="idx">05</span><h2 data-i18n="nav.printing">3D Printing</h2></div>
-      <p class="proj-desc" data-i18n="print.intro" style="margin-bottom:20px;max-width:60ch;">A live look at ongoing 3D-printing work, embedded directly from its own repository.</p>
-      <div class="embed-frame">
-        <iframe src="https://g-claudino.github.io/3d_printing/" loading="lazy" title="3D Printing"></iframe>
-      </div>
-      <div class="embed-foot">
-        <a class="proj-link" href="https://g-claudino.github.io/3d_printing/" target="_blank" rel="noopener">
-          <span data-i18n="print.openLive">Open live site</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg>
-        </a>
-        <a class="proj-link" href="https://github.com/g-claudino/3d_printing" target="_blank" rel="noopener">
-          <span data-i18n="print.viewRepo">View repository</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg>
-        </a>
-        <span class="embed-caption" data-i18n="print.caption">Deployed via GitHub Pages from the main branch.</span>
-      </div>
-    </section>
-
     <!-- ---------- instruments ---------- -->
     <section class="section" id="instruments">
-      <div class="section-head"><span class="idx">06</span><h2 data-i18n="nav.instruments">Instruments</h2></div>
+      <div class="section-head"><span class="idx">05</span><h2 data-i18n="nav.instruments">Instruments</h2></div>
 
       <div class="instr-group">
         <h3 data-i18n="instr.softwareHeading">Software</h3>
@@ -838,7 +740,7 @@
 
     <!-- ---------- field notes ---------- -->
     <section class="section" id="notes">
-      <div class="section-head"><span class="idx">07</span><h2 data-i18n="nav.notes">Field notes</h2></div>
+      <div class="section-head"><span class="idx">06</span><h2 data-i18n="nav.notes">Field notes</h2></div>
       <div class="notes-grid">
         <div>
           <h3 data-i18n="notes.certsHeading">Certificates &amp; awards</h3>
@@ -891,7 +793,7 @@
   // ---------- translations ----------
   const translations = {
     en: {
-      "nav.experience":"Experience","nav.background":"Background","nav.articles":"Articles","nav.projects":"Projects","nav.printing":"3D Printing","nav.instruments":"Instruments","nav.notes":"Field notes","nav.ariaLabel":"Section navigation",
+      "nav.experience":"Experience","nav.background":"Background","nav.articles":"Articles","nav.projects":"Projects","nav.printing":"3D Printing","nav.cv":"CV","nav.roadtrip":"Road Trip Project","nav.recipes":"Recipes","nav.instruments":"Instruments","nav.notes":"Field notes","nav.ariaLabel":"Site pages",
       "hero.kicker":"Aeronautical engineer","hero.role":"Working in flight mechanics for eVTOL aircraft, with a background spanning applied aerodynamics, embedded systems and CFD.",
       "hero.summary.pre":"Currently pursuing a ","hero.summary.strong1":"PhD in E-VTOL Flight Mechanics at ITA","hero.summary.mid":", and working as a ","hero.summary.strong2":"Product Development Engineer at Embraer","hero.summary.post":" on the E-VTOL program.",
       "hero.location":"São José dos Campos, Brazil",
@@ -922,11 +824,10 @@
       "beyond.youtube.label":"YouTube","beyond.youtube.desc":"runs a channel called \"Engenheiro Chefe.\"",
       "beyond.volunteering.label":"Volunteering","beyond.volunteering.desc":"project manager at Somos Todos Heróis (Dec 2018 – Dec 2019); founder of Sanca Social, a volunteering group in São Carlos.",
       "beyond.citizenship.label":"Citizenship","beyond.citizenship.desc":"dual Portuguese / Brazilian.",
-      "footer.github":"GitHub","footer.linkedin":"LinkedIn","title.suffix":"Aeronautical Engineer",
-      "print.intro":"A live look at ongoing 3D-printing work, embedded directly from its own repository.","print.openLive":"Open live site","print.viewRepo":"View repository","print.caption":"Deployed via GitHub Pages from the main branch."
+      "footer.github":"GitHub","footer.linkedin":"LinkedIn","title.suffix":"Aeronautical Engineer"
     },
     pt: {
-      "nav.experience":"Experiência","nav.background":"Formação","nav.articles":"Artigos","nav.projects":"Projetos","nav.printing":"Impressão 3D","nav.instruments":"Instrumentos","nav.notes":"Notas de bordo","nav.ariaLabel":"Navegação de seções",
+      "nav.experience":"Experiência","nav.background":"Formação","nav.articles":"Artigos","nav.projects":"Projetos","nav.printing":"Impressão 3D","nav.cv":"CV","nav.roadtrip":"Projeto Road Trip","nav.recipes":"Receitas","nav.instruments":"Instrumentos","nav.notes":"Notas de bordo","nav.ariaLabel":"Páginas do site",
       "hero.kicker":"Engenheiro aeronáutico","hero.role":"Atua em mecânica de voo para aeronaves eVTOL, com experiência em aerodinâmica aplicada, sistemas embarcados e CFD.",
       "hero.summary.pre":"Atualmente cursando ","hero.summary.strong1":"doutorado em Mecânica de Voo para eVTOL no ITA","hero.summary.mid":", e atuando como ","hero.summary.strong2":"Engenheiro de Desenvolvimento de Produto na Embraer","hero.summary.post":" no programa E-VTOL.",
       "hero.location":"São José dos Campos, Brasil",
@@ -957,11 +858,10 @@
       "beyond.youtube.label":"YouTube","beyond.youtube.desc":"mantém um canal chamado \"Engenheiro Chefe\".",
       "beyond.volunteering.label":"Voluntariado","beyond.volunteering.desc":"gerente de projetos na Somos Todos Heróis (dez/2018 – dez/2019); fundador do Sanca Social, grupo de voluntariado em São Carlos.",
       "beyond.citizenship.label":"Cidadania","beyond.citizenship.desc":"dupla cidadania portuguesa e brasileira.",
-      "footer.github":"GitHub","footer.linkedin":"LinkedIn","title.suffix":"Engenheiro Aeronáutico",
-      "print.intro":"Um recorte ao vivo de um projeto contínuo de impressão 3D, incorporado diretamente do próprio repositório.","print.openLive":"Abrir site ao vivo","print.viewRepo":"Ver repositório","print.caption":"Publicado via GitHub Pages a partir da branch main."
+      "footer.github":"GitHub","footer.linkedin":"LinkedIn","title.suffix":"Engenheiro Aeronáutico"
     },
     fr: {
-      "nav.experience":"Expérience","nav.background":"Formation","nav.articles":"Articles","nav.projects":"Projets","nav.printing":"Impression 3D","nav.instruments":"Instruments","nav.notes":"Carnet de bord","nav.ariaLabel":"Navigation des sections",
+      "nav.experience":"Expérience","nav.background":"Formation","nav.articles":"Articles","nav.projects":"Projets","nav.printing":"Impression 3D","nav.cv":"CV","nav.roadtrip":"Projet Road Trip","nav.recipes":"Recettes","nav.instruments":"Instruments","nav.notes":"Carnet de bord","nav.ariaLabel":"Pages du site",
       "hero.kicker":"Ingénieur aéronautique","hero.role":"Travaille sur la mécanique du vol pour aéronefs eVTOL, avec une expérience en aérodynamique appliquée, systèmes embarqués et CFD.",
       "hero.summary.pre":"Poursuit actuellement un ","hero.summary.strong1":"doctorat en Mécanique du Vol pour eVTOL à l'ITA","hero.summary.mid":", et travaille comme ","hero.summary.strong2":"Ingénieur en Développement Produit chez Embraer","hero.summary.post":" sur le programme E-VTOL.",
       "hero.location":"São José dos Campos, Brésil",
@@ -992,11 +892,10 @@
       "beyond.youtube.label":"YouTube","beyond.youtube.desc":"anime une chaîne appelée « Engenheiro Chefe ».",
       "beyond.volunteering.label":"Bénévolat","beyond.volunteering.desc":"chef de projet chez Somos Todos Heróis (déc. 2018 – déc. 2019) ; fondateur de Sanca Social, un groupe de bénévolat à São Carlos.",
       "beyond.citizenship.label":"Citoyenneté","beyond.citizenship.desc":"double nationalité portugaise et brésilienne.",
-      "footer.github":"GitHub","footer.linkedin":"LinkedIn","title.suffix":"Ingénieur Aéronautique",
-      "print.intro":"Un aperçu en direct d'un projet d'impression 3D en cours, intégré directement depuis son propre dépôt.","print.openLive":"Ouvrir le site en direct","print.viewRepo":"Voir le dépôt","print.caption":"Déployé via GitHub Pages depuis la branche main."
+      "footer.github":"GitHub","footer.linkedin":"LinkedIn","title.suffix":"Ingénieur Aéronautique"
     },
     de: {
-      "nav.experience":"Erfahrung","nav.background":"Ausbildung","nav.articles":"Artikel","nav.projects":"Projekte","nav.printing":"3D-Druck","nav.instruments":"Instrumente","nav.notes":"Feldnotizen","nav.ariaLabel":"Abschnittsnavigation",
+      "nav.experience":"Erfahrung","nav.background":"Ausbildung","nav.articles":"Artikel","nav.projects":"Projekte","nav.printing":"3D-Druck","nav.cv":"Lebenslauf","nav.roadtrip":"Road-Trip-Projekt","nav.recipes":"Rezepte","nav.instruments":"Instrumente","nav.notes":"Feldnotizen","nav.ariaLabel":"Seiten der Website",
       "hero.kicker":"Luftfahrtingenieur","hero.role":"Arbeitet an Flugmechanik für eVTOL-Fluggeräte, mit Erfahrung in angewandter Aerodynamik, eingebetteten Systemen und CFD.",
       "hero.summary.pre":"Promoviert derzeit im Bereich ","hero.summary.strong1":"eVTOL-Flugmechanik am ITA","hero.summary.mid":" und arbeitet als ","hero.summary.strong2":"Produktentwicklungsingenieur bei Embraer","hero.summary.post":" im E-VTOL-Programm.",
       "hero.location":"São José dos Campos, Brasilien",
@@ -1027,11 +926,10 @@
       "beyond.youtube.label":"YouTube","beyond.youtube.desc":"betreibt einen Kanal namens „Engenheiro Chefe“.",
       "beyond.volunteering.label":"Ehrenamt","beyond.volunteering.desc":"Projektleiter bei Somos Todos Heróis (Dez. 2018 – Dez. 2019); Gründer von Sanca Social, einer Freiwilligengruppe in São Carlos.",
       "beyond.citizenship.label":"Staatsbürgerschaft","beyond.citizenship.desc":"doppelte portugiesisch-brasilianische Staatsbürgerschaft.",
-      "footer.github":"GitHub","footer.linkedin":"LinkedIn","title.suffix":"Luftfahrtingenieur",
-      "print.intro":"Ein Live-Einblick in ein laufendes 3D-Druck-Projekt, direkt aus dem eigenen Repository eingebettet.","print.openLive":"Live-Seite öffnen","print.viewRepo":"Repository ansehen","print.caption":"Bereitgestellt über GitHub Pages aus dem main-Branch."
+      "footer.github":"GitHub","footer.linkedin":"LinkedIn","title.suffix":"Luftfahrtingenieur"
     },
     es: {
-      "nav.experience":"Experiencia","nav.background":"Formación","nav.articles":"Artículos","nav.projects":"Proyectos","nav.printing":"Impresión 3D","nav.instruments":"Instrumentos","nav.notes":"Notas de campo","nav.ariaLabel":"Navegación de secciones",
+      "nav.experience":"Experiencia","nav.background":"Formación","nav.articles":"Artículos","nav.projects":"Proyectos","nav.printing":"Impresión 3D","nav.cv":"CV","nav.roadtrip":"Proyecto Road Trip","nav.recipes":"Recetas","nav.instruments":"Instrumentos","nav.notes":"Notas de campo","nav.ariaLabel":"Páginas del sitio",
       "hero.kicker":"Ingeniero aeronáutico","hero.role":"Trabaja en mecánica de vuelo para aeronaves eVTOL, con experiencia en aerodinámica aplicada, sistemas embebidos y CFD.",
       "hero.summary.pre":"Actualmente cursa un ","hero.summary.strong1":"doctorado en Mecánica de Vuelo para eVTOL en el ITA","hero.summary.mid":", y trabaja como ","hero.summary.strong2":"Ingeniero de Desarrollo de Producto en Embraer","hero.summary.post":" en el programa E-VTOL.",
       "hero.location":"São José dos Campos, Brasil",
@@ -1062,8 +960,7 @@
       "beyond.youtube.label":"YouTube","beyond.youtube.desc":"mantiene un canal llamado «Engenheiro Chefe».",
       "beyond.volunteering.label":"Voluntariado","beyond.volunteering.desc":"gerente de proyecto en Somos Todos Heróis (dic. 2018 – dic. 2019); fundador de Sanca Social, un grupo de voluntariado en São Carlos.",
       "beyond.citizenship.label":"Ciudadanía","beyond.citizenship.desc":"doble ciudadanía portuguesa y brasileña.",
-      "footer.github":"GitHub","footer.linkedin":"LinkedIn","title.suffix":"Ingeniero Aeronáutico",
-      "print.intro":"Un vistazo en vivo a un proyecto de impresión 3D en curso, incorporado directamente desde su propio repositorio.","print.openLive":"Abrir sitio en vivo","print.viewRepo":"Ver repositorio","print.caption":"Publicado mediante GitHub Pages desde la rama main."
+      "footer.github":"GitHub","footer.linkedin":"LinkedIn","title.suffix":"Ingeniero Aeronáutico"
     }
   };
 
@@ -1107,20 +1004,6 @@
 
   applyLanguage(initialLanguage());
 
-  // ---------- highlight active rail section on scroll ----------
-  const links = document.querySelectorAll('.rail-nav a');
-  const targets = Array.from(links).map(a => document.querySelector(a.getAttribute('href')));
-  if ('IntersectionObserver' in window){
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting){
-          const id = '#' + entry.target.id;
-          links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === id));
-        }
-      });
-    }, { rootMargin: '-40% 0px -50% 0px' });
-    targets.forEach(t => t && io.observe(t));
-  }
 </script>
 </body>
 </html>
